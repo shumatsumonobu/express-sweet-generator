@@ -2,296 +2,390 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.0.0] - 2026-03-13
+
+### Breaking Changes
+
+- **Removed `-p, --port` CLI option** — Port is now configured via `.env` (`PORT=3000`) in the generated app instead of at generation time.
+
+### Changed
+
+- **express-sweet v5** — Generated apps now target express-sweet v5.0.0 with its latest features and improvements.
+- **SQLite by default** — Generated apps now use SQLite instead of MySQL/MariaDB. Run `npm run setup` to create the database.
+- Updated CLI dependency `ejs` from v3 to v5.
+
 ## [4.0.0] - 2025-12-19
 
 ### Breaking Changes
 
-**Express 5 Migration**
-- **Requires Node.js 18.x or higher**
-- Updated `express-sweet` dependency from v3.0.1 to v4.0.0
-- Templates now use Express 5.2.1 (upgraded from Express 4.21.2)
-- Note: `express-handlebars` remains at v7.1.3 to maintain Node.js 18+ compatibility (v8 requires Node.js 20+)
-- For more details on Express 5 changes, see the [Express.js Release Notes](https://expressjs.com/en/changelog/)
-
-**Express Sweet v4.0.0 Updates**
-- `express-sweet` v4.0.0 includes middleware architecture refactoring (class-based to function-based)
-- For detailed breaking changes and migration notes, see the [express-sweet CHANGELOG](https://github.com/takuya-motoshima/express-sweet/blob/main/CHANGELOG.md#unreleased)
-- Note: These changes are internal to express-sweet and do not affect standard usage through the `mount()` function
+- **Express 5 support** — Generated apps now run on Express 5.2.1. Requires Node.js 18+.
+- **express-sweet v4** — Generated apps now target express-sweet v4.0.0. See the [express-sweet CHANGELOG](https://github.com/shumatsumonobu/express-sweet/blob/main/CHANGELOG.md) for details.
 
 ### Added
 
-**File Upload Support (Multer)**
-- Added `config/upload.js` configuration file to templates for flexible file upload handling
-- Support for single file, multiple files (array), and multiple field uploads
-- Both memory storage and disk storage options available
-- Includes comprehensive JSDoc documentation with usage examples
+- **File uploads** — New `config/upload.js` template with Multer integration. Supports single file, multi-file, and multi-field uploads with memory or disk storage.
 
 ### Changed
 
-**Template Updates**
-- Updated route path patterns to Express 5 syntax:
-  - Changed `/:userId(\\d+)` to `/^\/(?<userId>\d+)$/` in routes/api/users.js (CJS and ESM)
-  - Applied to GET, PUT, and DELETE routes with regex parameter validation using named capture groups
-- Added `config/upload.js` to both CJS and ESM templates with disabled default configuration
+- Route path patterns now use Express 5 RegExp syntax with named capture groups (e.g. `/^\/(?<userId>\d+)$/` instead of `/:userId(\\d+)`).
 
-### Migration Notes
+### Migration
 
-**New Projects**
+New projects get Express 5 automatically. For existing projects:
 
-Generated applications using v4.0.0+ templates will automatically use Express 5 and benefit from:
-- Improved async/await error handling with automatic Promise rejection forwarding
-- Updated path routing with RegExp and named capture groups for parameter validation
-
-**Existing Projects**
-
-To migrate existing projects to v4.0.0:
-
-1. **Update Node.js**
-   - Upgrade to Node.js 18.x or higher
-
-2. **Update package.json dependencies**
-   ```json
-   {
-     "dependencies": {
-       "express-sweet": "^4.0.0"
-     }
-   }
-   ```
-
-3. **Update route path patterns with regex** (if used)
-   ```js
-   // Before (Express 4)
-   router.get('/:userId(\\d+)', ...)
-
-   // After (Express 5)
-   router.get(/^\/(?<userId>\d+)$/, ...)
-   ```
-
-4. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-For more details on Express 5 breaking changes, see the [Express 5 Migration Guide](https://expressjs.com/en/guide/migrating-5.html).
+1. Upgrade to Node.js 18+
+2. Set `"express-sweet": "^4.0.0"` in `package.json`
+3. Update route path patterns from Express 4 string syntax to RegExp ([Express 5 Migration Guide](https://expressjs.com/en/guide/migrating-5.html))
 
 ## [3.0.1] - 2025-09-02
 
 ### Changed
 
-- Added connection pool configuration examples and JSDoc documentation to database configuration template.
+- Database config template now includes connection pool configuration examples.
 
 ## [3.0.0] - 2025-08-26
 
-### Changed
+### Breaking Changes
 
-- **Breaking Change**: Updated `express-sweet` dependency from v2.0.9 to v3.0.0
-  - Templates now use the new `DatabaseManager` singleton pattern instead of the deprecated `Database` class
-  - All generated models automatically benefit from improved database connection management and performance
-  - See the [express-sweet changelog](https://github.com/takuya-motoshima/express-sweet/blob/main/CHANGELOG.md) for detailed breaking changes
+- **express-sweet v3** — Generated apps now target express-sweet v3.0.0 with improved database connection management. See the [express-sweet CHANGELOG](https://github.com/shumatsumonobu/express-sweet/blob/main/CHANGELOG.md) for details.
 
 ### Added
 
-- **Logging Configuration**: Added `config/logging.js` to templates for Morgan logging configuration
-  - Provides centralized logging settings with configurable format and skip options
-  - Default format set to 'combined' with skip property set to undefined for all requests
-  - Includes comprehensive JSDoc documentation with usage examples
+- **HTTP logging config** — New `config/logging.js` template for Morgan logging with configurable format and skip rules.
 
-### Migration Notes
+### Migration
 
-Generated applications using v3.0.0+ templates will automatically use the new database architecture. No manual changes are required for new projects.
-
-For existing projects, update your `package.json` to use `express-sweet@^3.0.0` and follow the migration guide in the [express-sweet changelog](https://github.com/takuya-motoshima/express-sweet/blob/main/CHANGELOG.md).
+New projects get the new database architecture automatically. For existing projects, update to `express-sweet@^3.0.0` and follow the migration guide in the [express-sweet CHANGELOG](https://github.com/shumatsumonobu/express-sweet/blob/main/CHANGELOG.md).
 
 ## [2.0.23] - 2025-08-25
 
 ### Changed
 
-- **Security Updates**: Updated dependencies to address security vulnerabilities
-  - commander: 2.15.1 → 14.0.0
-  - ejs: 2.6.1 → 3.1.10
-  - fs-extra: 9.1.0 → 11.3.1
-
-- **Port Configuration Enhancement**: Modified the generated application's `package.json` to include the port specified via express-sweet-generator CLI in the nodemon start script
-  - The `npm start` script now uses the port specified with the `-p, --port` option
-  - Example: `express-sweet -p 4000 myapp` generates `"start": "PORT=4000 nodemon ..."`
+- **Security** — Updated CLI dependencies: commander 2.15.1 → 14.0.0, ejs 2.6.1 → 3.1.10, fs-extra 9.1.0 → 11.3.1.
+- **Port forwarding** — The `-p, --port` CLI option now injects the port into the generated `npm start` script (e.g. `express-sweet -p 4000 myapp` → `"start": "PORT=4000 nodemon ..."`).
 
 ## [2.0.22] - 2025-08-12
 
 ### Changed
 
-- Updated `express-sweet` to v2.0.9 for latest fixes and improvements.
+- Updated template dependency `express-sweet` to v2.0.9.
 
 ## [2.0.21] - 2025-07-22
 
 ### Changed
 
-- Updated template dependencies:
-
-  - `express`: 4.19.2 → 4.21.2  
-  - `express-sweet`: 2.0.5 → 2.0.7
-
-  See the [express-sweet](https://www.npmjs.com/package/express-sweet) changelog [here](https://github.com/takuya-motoshima/express-sweet/blob/main/CHANGELOG.md).
+- Updated template dependencies: `express` 4.19.2 → 4.21.2, `express-sweet` 2.0.5 → 2.0.7.
 
 ## [2.0.20] - 2025-02-18
 
 ### Changed
 
-- Improved error handling in the template's API client and Datatable. Specifically, added error logging to the errorHook and ajaxErrorHook methods.
+- Improved error logging in the frontend API client and Datatable error hooks.
 
 ## [2.0.19] - 2025-02-09
 
 ### Changed
 
 - Reduced container padding and increased content width on tablet and smaller screens.
-- Updated metronic-extension from version 3.0.15 to ^3.0.16.
-- Changed the login page background to a simple blue image.
+- Updated `metronic-extension` to ^3.0.16.
+- Simplified the login page background to a clean blue image.
 
 ## [2.0.18] - 2025-02-04
 
 ### Changed
 
-- Updated express-sweet package version from 2.0.3 to 2.0.5, which the template depends on.
+- Updated template dependency `express-sweet` to v2.0.5.
 
 ## [2.0.17] - 2025-02-02
 
 ### Changed
 
-- Modified the template's validation result processing to return error messages along with HTTP status 400 when input data is invalid.
+- Validation errors now return structured error messages with HTTP 400 status.
 
 ## [2.0.16] - 2025-01-31
 
 ### Changed
 
-- Updated the Metronic extension package version from 3.0.9 to 3.0.15 for templates.
+- Updated `metronic-extension` to v3.0.15.
 
 ## [2.0.15] - 2025-01-30
 
-### Changed
+### Fixed
 
-- Fixed front-end JS comments in templates.
+- Corrected JSDoc annotations in template frontend JavaScript.
 
 ## [2.0.14] - 2025-01-28
 
-### Changed
+### Fixed
 
-- Fixed JSDoc and comments in the template frontend JS. 
+- Corrected inline comments in template frontend JavaScript.
 
 ## [2.0.13] - 2025-01-27
 
 ### Changed
 
-- Refactored templates, endpoints, view structure, and frontend JavaScript code.
+- Reorganized template route endpoints and view structure for better clarity.
 
 ## [2.0.12] - 2025-01-19
 
 ### Changed
 
-- Added logic to control the initial display state of the sidebar based on the sidebar minimize state (sidebar_minimize_state) stored in the cookie.
+- Sidebar now remembers its minimized state via cookie (`sidebar_minimize_state`).
 
 ## [2.0.11] - 2025-01-17
 
 ### Changed
 
-- Added an option to `client/webpack.config.js` in the template to allow top-level await.
-
-    `webpack.config.js`:
-    ```js
-    module.exports = {
-      // ... other configurations ...
-
-      experiments: {
-        topLevelAwait: true,
-      },
-
-      // ... other configurations ...
-    };
-    ```
-- Added `log_date_format: 'YYYY-MM-DD HH:mm:ss'` to `ecosystem.config.js.ejs` for ESM and CJS templates to format PM2 log messages with timestamps.
-    ```javascript
-    // Instead of:
-    import MyModule from '../utils/MyModule.js';
-
-    // You can now use:
-    import MyModule from '#~/utils/MyModule.js';
-    ```
-- Added the `log_date_format` option (`YYYY-MM-DD HH:mm:ss`) to `ecosystem.config.js.ejs` for ESM and CJS templates to specify the date format for log messages in PM2, making it easier to track the time of events in the logs. 
+- Enabled top-level `await` in Webpack config (`experiments.topLevelAwait`).
+- Added timestamp formatting (`YYYY-MM-DD HH:mm:ss`) to PM2 log output in `ecosystem.config.js`.
 
 ## [2.0.10] - 2024-12-31
 
 ### Changed
 
-- Refactored variable names used in the skeleton processing.
+- Improved variable naming across generated templates.
 
 ## [2.0.9] - 2024-12-31
 
 ### Changed
 
-- Refactor the skeleton model class.
+- Improved generated model class structure.
 
 ## [2.0.8] - 2024-11-21
 
 ### Changed
 
-- Consolidated request data validation with `express-validator` into a common middleware for better code reusability.
-- Renamed empty check utility function to `isEmpty` for clarity.
-- Reorganized custom validation functions into dedicated validators directory.
+- Consolidated request validation into a shared `checkValidationResult` middleware.
+- Reorganized custom validators into a dedicated `validators/` directory.
 
 ## [2.0.7] - 2024-11-21
 
 ### Changed
 
-- **Refactor:** Renamed custom error classes directory to `errors` for better naming consistency.
-- Replaced specific error classes with a more general-purpose `NotFoundError` class for flexible resource-not-found handling.
+- Renamed custom error classes directory to `errors/` for consistency.
+- Introduced a general-purpose `NotFoundError` class for flexible resource-not-found handling.
 
 ## [2.0.6] - 2024-11-18
 
 ### Changed
 
-- Refactored variable names for better code readability.
 - Fixed a bug in the user API client module.
-- Frontend: Consolidated datatable filtering logic into a shared reusable function for improved maintainability.
+- Consolidated datatable filtering logic into a shared reusable function.
 
 ## [2.0.5] - 2024-11-13
 
-### Changed
+### Added
 
-- Added error page handling for 404 and 500 errors with customizable layouts.
-  - Side menu is automatically hidden on error pages using the `isErrorPage` flag.
-  - Error handling hook allows custom error page rendering logic.
-
-  Examples of error pages:
-  * **404 Page (Not Found):**
-      ![404-error.jpeg](screencaps/404-error.jpeg)
-  * **500 Page (Internal Server Error):**
-      ![500-error.jpeg](screencaps/500-error.jpeg)
+- **Error pages** — Custom 404 and 500 error pages with automatic sidebar hiding via the `isErrorPage` flag.
+- Error handling hook for custom error page rendering logic.
 
 ## [2.0.4] - 2024-11-11
 
+### Added
+
+- **Frontend base classes** — Extended API client and Datatable classes for standardized error handling, including authentication redirect hooks and reusable Ajax error handling.
+
+## [2.0.3] - 2024-09-04
+
 ### Changed
 
-- Added extended API client and Datatable base classes to frontend templates for standardized error handling and data table management.
-  - API client includes customizable error hooks for authentication redirects.
-  - Datatable class provides reusable Ajax error handling for data tables.
+- Full ESM compliance for generated applications.
 
-[2.0.5]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.4...v2.0.5
-[2.0.6]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.5...v2.0.6
-[2.0.7]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.6...v2.0.7
-[2.0.8]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.7...v2.0.8
-[2.0.9]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.8...v2.0.9
-[2.0.10]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.9...v2.0.10
-[2.0.11]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.10...v2.0.11
-[2.0.12]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.11...v2.0.12
-[2.0.13]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.12...v2.0.13
-[2.0.14]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.13...v2.0.14
-[2.0.15]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.14...v2.0.15
-[2.0.16]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.15...v2.0.16
-[2.0.17]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.16...v2.0.17
-[2.0.18]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.17...v2.0.18
-[2.0.19]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.18...v2.0.19
-[2.0.20]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.19...v2.0.20
-[2.0.21]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.20...v2.0.21
-[2.0.22]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.21...v2.0.22
-[2.0.23]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.22...v2.0.23
-[3.0.0]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v2.0.23...v3.0.0
-[3.0.1]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v3.0.0...v3.0.1
-[4.0.0]: https://github.com/takuya-motoshima/express-sweet-generator/compare/v3.0.1...v4.0.0
+## [2.0.2] - 2024-09-02
+
+### Changed
+
+- Updated template dependencies (`express`, `rollup`, etc.) to latest versions.
+
+## [2.0.1] - 2024-04-05
+
+### Changed
+
+- Removed `nodejs-shared` package dependency from generated templates.
+
+## [2.0.0] - 2024-03-24
+
+### Breaking Changes
+
+- **express-sweet v2** — Templates target express-sweet v2.0.0. AWS SDK dependency has been removed.
+
+## [1.0.20] - 2024-03-22
+
+### Changed
+
+- Changed the default value of `cookie_secure` in `config/config.js` from `true` to `false`.
+
+## [1.0.19] - 2024-03-21
+
+### Changed
+
+- Rebuilt the frontend client bundle (`public/build`) to latest versions.
+
+## [1.0.18] - 2024-03-06
+
+### Changed
+
+- Updated `metronic-extension` from v1.0.1 to v3.0.9.
+
+## [1.0.17] - 2024-03-06
+
+### Fixed
+
+- Fixed a typo in the common JS module name referenced from template views.
+
+## [1.0.16] - 2024-03-05
+
+### Changed
+
+- Renamed sample database from `sampledb` to `express_sweet_db`.
+
+## [1.0.15] - 2024-02-29
+
+### Added
+
+- **Color themes** — Generated applications now support switchable color themes.
+
+## [1.0.14] - 2023-12-30
+
+### Added
+
+- Session cookie `Secure` and `HttpOnly` attributes are now configurable in `config/authentication.js`.
+
+## [1.0.13] - 2023-12-30
+
+### Added
+
+- Session cookie name is now configurable via the `cookie_name` field in `config/authentication.js`.
+
+## [1.0.12] - 2023-07-17
+
+### Changed
+
+- The `beforeRender` option in view config now supports async functions.
+- Added new Math-related Handlebars helpers.
+
+## [1.0.11] - 2023-07-12
+
+### Changed
+
+- Moved the `is_ajax` option from `config/authentication.js` to `config/config.js`.
+- Replaced `error_handler` option with `hook_handle_error` in `config/config.js`.
+
+## [1.0.10] - 2023-07-11
+
+### Changed
+
+- The `failure_redirect` option in `config/authentication.js` now accepts a function for dynamic redirect URLs.
+
+## [1.0.9] - 2023-06-29
+
+### Changed
+
+- Renamed Handlebars helper functions from snake_case to camelCase.
+- Added `number2locale` view helper for locale-aware number formatting.
+
+## [1.0.8] - 2023-06-12
+
+### Changed
+
+- The `beforeRender` function in `config/view.js` now receives the `express.Request` object as an argument (express-sweet v1.0.27).
+
+## [1.0.7] - 2022-10-24
+
+### Added
+
+- Added `is_ajax` option to authentication config for Ajax request handling.
+
+## [1.0.6] - 2022-10-20
+
+### Added
+
+- Request body parameter is now passed to the authentication callback function.
+
+## [1.0.5] - 2022-07-27
+
+### Added
+
+- **View render hooks** — New `beforeRender` hook function in view config, called before each template render.
+
+## [1.0.4] - 2022-05-18
+
+### Added
+
+- **Redis session store** — Added `session_store` and `redis_host` options to `config/authentication.js` (express-sweet v1.0.18).
+
+## [1.0.3] - 2022-05-17
+
+### Changed
+
+- Improved UX of template views.
+
+## [1.0.2] - 2022-02-14
+
+### Changed
+
+- `allow_unauthenticated` in `config/authentication.js` now accepts `RegExp` patterns in addition to strings.
+
+## [1.0.1] - 2021-06-10
+
+### Added
+
+- **ESM templates** — Added ESM (ECMAScript Modules) template set alongside the existing CJS templates.
+
+## [1.0.0] - 2021-05-31
+
+### Added
+
+- Initial release of Express Sweet Generator.
+- CJS application template with authentication, Sequelize ORM, Handlebars views, and Webpack frontend.
+- CLI with `-o`, `-p`, and `-f` options.
+
+[1.0.0]: https://github.com/shumatsumonobu/express-sweet-generator/releases/tag/v1.0.0
+[1.0.1]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.0...v1.0.1
+[1.0.2]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.1...v1.0.2
+[1.0.3]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.2...v1.0.3
+[1.0.4]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.3...v1.0.4
+[1.0.5]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.4...v1.0.5
+[1.0.6]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.5...v1.0.6
+[1.0.7]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.6...v1.0.7
+[1.0.8]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.7...v1.0.8
+[1.0.9]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.8...v1.0.9
+[1.0.10]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.9...v1.0.10
+[1.0.11]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.10...v1.0.11
+[1.0.12]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.11...v1.0.12
+[1.0.13]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.12...v1.0.13
+[1.0.14]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.13...v1.0.14
+[1.0.15]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.14...v1.0.15
+[1.0.16]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.15...v1.0.16
+[1.0.17]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.16...v1.0.17
+[1.0.18]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.17...v1.0.18
+[1.0.19]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.18...v1.0.19
+[1.0.20]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.19...v1.0.20
+[2.0.0]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v1.0.20...v2.0.0
+[2.0.1]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.0...v2.0.1
+[2.0.2]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.1...v2.0.2
+[2.0.3]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.2...v2.0.3
+[2.0.4]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.3...v2.0.4
+[2.0.5]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.4...v2.0.5
+[2.0.6]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.5...v2.0.6
+[2.0.7]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.6...v2.0.7
+[2.0.8]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.7...v2.0.8
+[2.0.9]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.8...v2.0.9
+[2.0.10]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.9...v2.0.10
+[2.0.11]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.10...v2.0.11
+[2.0.12]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.11...v2.0.12
+[2.0.13]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.12...v2.0.13
+[2.0.14]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.13...v2.0.14
+[2.0.15]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.14...v2.0.15
+[2.0.16]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.15...v2.0.16
+[2.0.17]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.16...v2.0.17
+[2.0.18]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.17...v2.0.18
+[2.0.19]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.18...v2.0.19
+[2.0.20]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.19...v2.0.20
+[2.0.21]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.20...v2.0.21
+[2.0.22]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.21...v2.0.22
+[2.0.23]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.22...v2.0.23
+[3.0.0]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v2.0.23...v3.0.0
+[3.0.1]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v3.0.0...v3.0.1
+[4.0.0]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v3.0.1...v4.0.0
+[5.0.0]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v4.0.0...v5.0.0

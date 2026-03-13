@@ -1,10 +1,13 @@
 const express = require('express');
 const expx = require('express-sweet');
 
-// Creates and configures an ExpressJS web server.
-const app = express();
+async function main() {
+  const app = express();
+  await expx.mount(app);
 
-// Mount the extension.
-expx.mount(app);
-
-module.exports = app;
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Demo running at http://localhost:${port}`);
+  });
+}
+main();

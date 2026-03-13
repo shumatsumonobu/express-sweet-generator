@@ -1,2 +1,8 @@
+# Dependencies
 node_modules/
+
+# Editor settings
 .vscode/
+
+# Claude Code configuration
+.claude/

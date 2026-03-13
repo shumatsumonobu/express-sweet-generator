@@ -1,2 +1,6 @@
+# Dependencies
 node_modules/
+
+# Claude Code configuration
+.claude/
 CLAUDE.md

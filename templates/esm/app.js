@@ -1,10 +1,10 @@
-import express from 'express'
+import express from 'express';
 import * as expx from 'express-sweet';
 
-// Creates and configures an ExpressJS web server.
 const app = express();
+await expx.mount(app);
 
-// Mount the extension.
-expx.mount(app);
-
-export default app;
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Demo running at http://localhost:${port}`);
+});

@@ -1,45 +1,5 @@
-{{!< default}}
-{{#contentFor 'title'}}500 Error: Server Error{{/contentFor}}
-{{#contentFor 'style'}}
-<style>
-  body {
-    background-image: url('/build/theme/media/misc/auth-bg.png');
-    /* background-image: url('/build/theme/media/auth/bg6.jpg'); */
-  }
-  
-  /* [data-bs-theme="dark"] body {
-    background-image: url('/build/theme/media/auth/bg6-dark.jpg');
-  } */
-</style>
-{{/contentFor}}
-<!--begin::Authentication - Signup Welcome Message -->
-<div class="d-flex flex-column flex-center flex-column-fluid">
-  <!--begin::Content-->
-  <div class="flex flex-column flex-center text-center p-lg-10 p-3">
-    <!--begin::Wrapper-->
-    <div class="card card-flush w-lg-650px py-5">
-      <div class="card-body py-15 py-lg-20">
-        <!--begin::Title-->
-        <h1 class="fw-bolder fs-2hx mb-4">500 Error: Server Error</h1>
-        <!--end::Title-->
-        <!--begin::Text-->
-        <div class="fw-semibold fs-6 mb-7">We're sorry, a server error has occurred. Please try again later. If the problem persists, please contact us.</div>
-        <!--end::Text-->
-        <!--begin::Illustration-->
-        <div class="mb-3">
-          <img src="/build/theme/media/auth/500-error.png" class="mw-100 mh-300px theme-light-show" alt="" />
-          <img src="/build/theme/media/auth/500-error-dark.png" class="mw-100 mh-300px theme-dark-show" alt="" />
-        </div>
-        <!--end::Illustration-->
-        <!--begin::Link-->
-        <div class="mb-0">
-          <a href="/" class="btn btn-sm btn-primary">Back to Home</a>
-        </div>
-        <!--end::Link-->
-      </div>
-    </div>
-    <!--end::Wrapper-->
-  </div>
-  <!--end::Content-->
+<div class="flex flex-col items-center justify-center min-h-[60vh]">
+  <h1 class="text-6xl font-bold text-white/10 mb-4">500</h1>
+  <p class="text-gray-500 mb-6">Internal server error</p>
+  <a href="/" class="text-accent/70 hover:text-accent transition">Back to home</a>
 </div>
-<!--end::Authentication - Signup Welcome Message-->
