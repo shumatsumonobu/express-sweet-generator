@@ -1,6 +1,6 @@
 {
   "name": "express-sweet-generator",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "One command, zero boilerplate. Instantly scaffold a full-stack Express Sweet app — authentication, ORM, routing, views, and a Webpack-powered frontend — all wired up and ready to ship.",
   "main": "bin/express-sweet-cli.js",
   "files": [

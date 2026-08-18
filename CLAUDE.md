@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 CLI generator for Express Sweet applications. Scaffolds full-stack Express apps with authentication, Sequelize ORM, Handlebars views, and Tailwind CSS. Supports both CommonJS (CJS) and ECMAScript Modules (ESM) output formats.
 
-- **Current version**: v5.0.0 (targets express-sweet v5)
+- **Current version**: v5.1.0 (targets express-sweet v5.1)
 - **CLI entry point**: `bin/express-sweet-cli.js` (CommonJS)
 
 ## Architecture

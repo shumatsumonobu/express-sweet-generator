@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.1.0] - 2026-08-18
+
+### Added
+
+- **`hook_after_env_load` in the config template** — `config/config.js` ships with a commented example of the hook added in express-sweet 5.1.0, which runs after `.env` is loaded and before the database models are initialized. Uncomment it to decode a password, or fetch one from a secret manager, without putting the plain value in `.env`.
+
+### Changed
+
+- **express-sweet v5.1** — Generated apps now depend on `express-sweet@^5.1.0`.
+
 ## [5.0.0] - 2026-03-13
 
 ### Breaking Changes
@@ -389,3 +399,4 @@ New projects get the new database architecture automatically. For existing proje
 [3.0.1]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v3.0.0...v3.0.1
 [4.0.0]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v3.0.1...v4.0.0
 [5.0.0]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v4.0.0...v5.0.0
+[5.1.0]: https://github.com/shumatsumonobu/express-sweet-generator/compare/v5.0.0...v5.1.0
