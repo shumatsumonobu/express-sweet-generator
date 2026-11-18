@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.1.1] - 2026-11-18
+
+### Changed
+
+- **express-sweet v5.1.1** — Generated apps now depend on `express-sweet@^5.1.1` and `express@^5.3.0`. express-sweet 5.1.1 is a security release that updates its dependencies with known vulnerabilities, and express 5.3.0 pulls in the fixed proxy-addr, qs and body-parser. See the [express-sweet changelog](https://github.com/shumatsumonobu/express-sweet/blob/main/CHANGELOG.md).
+
+### Known issues
+
+- **sqlite3 stays on 5.1.7** — npm audit still reports vulnerabilities in the dependency tree of sqlite3 5.1.7 (tar, node-gyp). sqlite3 6.0.1 is not used because its prebuilt binary requires glibc 2.38 or later: on Debian 12 (glibc 2.36) the generated app fails to start with `GLIBC_2.38 not found`.
+
 ## [5.1.0] - 2026-08-18
 
 ### Added
